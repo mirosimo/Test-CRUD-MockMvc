@@ -43,27 +43,23 @@ public class JavaScriptFrameworkTests {
 		this.frameworkService.deleteAllEntities();
 		
 		JavaScriptFramework root = new JavaScriptFramework("root", null, 0);		
-			JavaScriptFramework reactRoot = new JavaScriptFramework("React", root, 1);
-				JavaScriptFramework reactV1_0 = new JavaScriptFramework("React ver 1.0", reactRoot, 1);
-				JavaScriptFramework reactV2_0 = new JavaScriptFramework("React ver 2.0", reactRoot, 2);
-				JavaScriptFramework reactV3_0 = new JavaScriptFramework("React ver 3.0", reactRoot, 3);
-					JavaScriptFramework reactV3_1 = new JavaScriptFramework("React ver 3.1", reactV3_0, 1);
-					JavaScriptFramework reactV3_2 = new JavaScriptFramework("React ver 3.2", reactV3_0, 2);
+			JavaScriptFramework reactV1_0 = new JavaScriptFramework("React ver 1.0", root, 1);
+			JavaScriptFramework reactV2_0 = new JavaScriptFramework("React ver 2.0", root, 2);
+			JavaScriptFramework reactV3_0 = new JavaScriptFramework("React ver 3.0", root, 3);
+				JavaScriptFramework reactV3_1 = new JavaScriptFramework("React ver 3.1", reactV3_0, 1);
+				JavaScriptFramework reactV3_2 = new JavaScriptFramework("React ver 3.2", reactV3_0, 2);
 				
-			JavaScriptFramework vueRoot = new JavaScriptFramework("Vue.js", root, 1);
-				JavaScriptFramework vueV1_0 = new JavaScriptFramework("Vue.js ver 1.0", vueRoot, 1);
-				JavaScriptFramework vueV2_0 = new JavaScriptFramework("Vue.js ver 2.0", vueRoot, 2);
+			JavaScriptFramework vueV1_0 = new JavaScriptFramework("Vue.js ver 1.0", root, 1);
+			JavaScriptFramework vueV2_0 = new JavaScriptFramework("Vue.js ver 2.0", root, 2);
 		
 			frameworkService.saveEntity(root);
-				frameworkService.saveEntity(reactRoot); 
-					frameworkService.saveEntity(reactV1_0); 
-					frameworkService.saveEntity(reactV2_0);
-					frameworkService.saveEntity(reactV3_0);
-						frameworkService.saveEntity(reactV3_1);
-						frameworkService.saveEntity(reactV3_2);
-				frameworkService.saveEntity(vueRoot); 		
-					frameworkService.saveEntity(vueV1_0); 
-					frameworkService.saveEntity(vueV2_0);
+				frameworkService.saveEntity(reactV1_0); 
+				frameworkService.saveEntity(reactV2_0);
+				frameworkService.saveEntity(reactV3_0);
+					frameworkService.saveEntity(reactV3_1);
+					frameworkService.saveEntity(reactV3_2); 		
+				frameworkService.saveEntity(vueV1_0); 
+				frameworkService.saveEntity(vueV2_0);
 	}
 
 	@Test
@@ -72,7 +68,7 @@ public class JavaScriptFrameworkTests {
 		prepareData();
 
 		mockMvc.perform(get("/framework-list")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$", hasSize(10)))
+				.andExpect(jsonPath("$", hasSize(8)))
 				.andExpect(jsonPath("$[0].name", is("root")))
 				.andExpect(jsonPath("$[1].name", is("React ver 1.0")));		
 				// To Do
