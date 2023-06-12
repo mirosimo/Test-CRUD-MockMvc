@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * You can imagine like this.
  * 
  *  -- ROOT
- * 		-- React 0 
+ * 		-- React
  * 				-- React 1.0
  * 				-- React 2.0
  *      		-- React 3.0
@@ -35,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *      					-- React 3.2
  *      		-- React 3.4
  *      
- * 		-- Vue  0 
+ * 		-- Vue 
  *   			-- Vue 1.0
  *   			-- Vue 2.0
  */
