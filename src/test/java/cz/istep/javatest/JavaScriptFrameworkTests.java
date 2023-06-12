@@ -43,14 +43,14 @@ public class JavaScriptFrameworkTests {
 		this.frameworkService.deleteAllEntities();
 		
 		JavaScriptFramework root = new JavaScriptFramework("root", null, 0);		
-			JavaScriptFramework reactRoot = new JavaScriptFramework("React 0", root, 1);
+			JavaScriptFramework reactRoot = new JavaScriptFramework("React", root, 1);
 				JavaScriptFramework reactV1_0 = new JavaScriptFramework("React ver 1.0", reactRoot, 1);
 				JavaScriptFramework reactV2_0 = new JavaScriptFramework("React ver 2.0", reactRoot, 2);
 				JavaScriptFramework reactV3_0 = new JavaScriptFramework("React ver 3.0", reactRoot, 3);
 					JavaScriptFramework reactV3_1 = new JavaScriptFramework("React ver 3.1", reactV3_0, 1);
 					JavaScriptFramework reactV3_2 = new JavaScriptFramework("React ver 3.2", reactV3_0, 2);
 				
-			JavaScriptFramework vueRoot = new JavaScriptFramework("Vue.js 0", root, 1);
+			JavaScriptFramework vueRoot = new JavaScriptFramework("Vue.js", root, 1);
 				JavaScriptFramework vueV1_0 = new JavaScriptFramework("Vue.js ver 1.0", vueRoot, 1);
 				JavaScriptFramework vueV2_0 = new JavaScriptFramework("Vue.js ver 2.0", vueRoot, 2);
 		
