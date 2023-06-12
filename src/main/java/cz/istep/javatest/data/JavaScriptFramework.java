@@ -26,20 +26,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * In root item (zero level) are collapsed all subitems. 
  * You can imagine like this.
  * 
- * 0 -- ROOT
- * 		-- React 1.0 
- *      -- React 2.0
- *      -- React 3.0
- * 					-- React 3.1
- * 					-- React 3.2
- *      			-- React 3.3
- *      					-- 3-3.1 React 3.1
- *      					-- 3.3.2 React 3.2
- *      			-- React 3.4
+ *  -- ROOT
+ * 		-- React 0 
+ * 				-- React 1.0
+ * 				-- React 2.0
+ *      		-- React 3.0
+ *      					-- React 3.1
+ *      					-- React 3.2
+ *      		-- React 3.4
  *      
- * 		-- Vue   1.0
- *   				-- Vue 1.1
- *   				-- Vue 1.2
+ * 		-- Vue  0 
+ *   			-- Vue 1.0
+ *   			-- Vue 2.0
  */
 
 
