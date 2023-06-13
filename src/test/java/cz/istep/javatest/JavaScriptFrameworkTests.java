@@ -1,8 +1,8 @@
 package cz.istep.javatest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,27 +37,32 @@ public class JavaScriptFrameworkTests {
 	@Autowired
 	private JavaScriptFrameworkService frameworkService;
 	
+
+	
 	@BeforeEach
 	public void prepareData() throws Exception {
 		this.frameworkService.deleteAllEntities();
 		
-		JavaScriptFramework root = new JavaScriptFramework("root", null, 0);		
-			JavaScriptFramework reactV1_0 = new JavaScriptFramework("React ver 1.0", root, 1);
-			JavaScriptFramework reactV2_0 = new JavaScriptFramework("React ver 2.0", root, 2);
-			JavaScriptFramework reactV3_0 = new JavaScriptFramework("React ver 3.0", root, 3);
+		JavaScriptFramework rootReact = new JavaScriptFramework("ROOT React", null, 0);		
+			JavaScriptFramework reactV1_0 = new JavaScriptFramework("React ver 1.0", rootReact, 1);
+			JavaScriptFramework reactV2_0 = new JavaScriptFramework("React ver 2.0", rootReact, 2);
+			JavaScriptFramework reactV3_0 = new JavaScriptFramework("React ver 3.0", rootReact, 3);
 				JavaScriptFramework reactV3_1 = new JavaScriptFramework("React ver 3.1", reactV3_0, 1);
 				JavaScriptFramework reactV3_2 = new JavaScriptFramework("React ver 3.2", reactV3_0, 2);
-				
-			JavaScriptFramework vueV1_0 = new JavaScriptFramework("Vue.js ver 1.0", root, 1);
-			JavaScriptFramework vueV2_0 = new JavaScriptFramework("Vue.js ver 2.0", root, 2);
 		
-			frameworkService.saveEntity(root);
-				frameworkService.saveEntity(reactV1_0); 
+		JavaScriptFramework rootVue = new JavaScriptFramework("ROOT Vue", null, 1);		
+			JavaScriptFramework vueV1_0 = new JavaScriptFramework("Vue.js ver 1.0", rootVue, 1);
+			JavaScriptFramework vueV2_0 = new JavaScriptFramework("Vue.js ver 2.0", rootVue, 2);
+		
+			frameworkService.saveEntity(rootReact);
+				frameworkService.saveEntity(reactV1_0);
 				frameworkService.saveEntity(reactV2_0);
 				frameworkService.saveEntity(reactV3_0);
 					frameworkService.saveEntity(reactV3_1);
-					frameworkService.saveEntity(reactV3_2); 		
-				frameworkService.saveEntity(vueV1_0); 
+					frameworkService.saveEntity(reactV3_2);
+					
+			frameworkService.saveEntity(rootVue);
+				frameworkService.saveEntity(vueV1_0);
 				frameworkService.saveEntity(vueV2_0);
 	}
 
@@ -68,8 +72,8 @@ public class JavaScriptFrameworkTests {
 		prepareData();
 
 		mockMvc.perform(get("/framework-list")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$", hasSize(8)))
-				.andExpect(jsonPath("$[0].name", is("root")))
+				.andExpect(jsonPath("$", hasSize(9)))
+				.andExpect(jsonPath("$[0].name", is("ROOT React")))
 				.andExpect(jsonPath("$[1].name", is("React ver 1.0")));		
 				// To Do
 	}
@@ -99,7 +103,7 @@ public class JavaScriptFrameworkTests {
 			.andExpect(jsonPath("$.id").exists())
 			.andExpect(jsonPath("$.name", is("React ver 3.0")));		
 		
-		assertThat(this.frameworkService.getAllEntities()).hasSize(9);
+		assertThat(this.frameworkService.getAllEntities()).hasSize(10);
 	}
 	
 	
@@ -128,22 +132,21 @@ public class JavaScriptFrameworkTests {
 			
 	
 	@Test
-	@DisplayName("Post **/framework-new** - Error - empty Framework, Framework exceed the limit length")
-	public void addFrameworkInvalid() throws Exception {
-		// To do				
-		/*JavaScriptFramework framework = new JavaScriptFramework();
-		mockMvc.perform(post("/frameworks").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(framework)))
+	@DisplayName("Post **/framework-new** - Error - empty Framework, Framework name exceed the limit length")
+	public void addFrameworkInvalid() throws Exception {						
+		JavaScriptFramework framework = new JavaScriptFramework();
+		mockMvc.perform(post("/framework-new").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(framework)))
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.errors", hasSize(1)))
 				.andExpect(jsonPath("$.errors[0].field", is("name")))
 				.andExpect(jsonPath("$.errors[0].message", is("NotEmpty")));
 		
 		framework.setName("verylongnameofthejavascriptframeworkjavaisthebest");
-		mockMvc.perform(post("/frameworks").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(framework)))
+		mockMvc.perform(post("/framework-new").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(framework)))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.errors", hasSize(1)))
 			.andExpect(jsonPath("$.errors[0].field", is("name")))
-			.andExpect(jsonPath("$.errors[0].message", is("Size")));*/
+			.andExpect(jsonPath("$.errors[0].message", is("Size")));
 	}
 
 }

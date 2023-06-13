@@ -2,6 +2,8 @@ package cz.istep.javatest.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +49,8 @@ public class JavaScriptFrameworkController {
 	 * Add new framework 
 	 */
 	@PostMapping("/framework-new")
-	public ResponseEntity<JavaScriptFramework> frameworkNew(@RequestBody JavaScriptFramework framework) {
+	//public ResponseEntity<JavaScriptFramework> frameworkNew(@RequestBody JavaScriptFramework framework) {
+	public ResponseEntity<JavaScriptFramework> frameworkNew(@Valid @RequestBody JavaScriptFramework framework) {
 		JavaScriptFramework savedFramework = this.frameworkService.saveEntity(framework);				
 		return new ResponseEntity<JavaScriptFramework>(savedFramework, HttpStatus.CREATED);	
 	}

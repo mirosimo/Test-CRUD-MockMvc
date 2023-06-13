@@ -48,5 +48,4 @@ public class JavaScriptFrameworkService {
 		JavaScriptFramework fr = this.frameworkRepository.save(framework);
 		return fr;
 	}
-	
 }

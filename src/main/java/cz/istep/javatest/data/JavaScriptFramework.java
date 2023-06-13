@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,16 +27,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * In root item (zero level) are collapsed all subitems. 
  * You can imagine like this.
  * 
- *  -- ROOT
+ *  -- Root React
  * 		-- React 1.0
  * 		-- React 2.0
  *      -- React 3.0
  *      			-- React 3.1
  *      			-- React 3.2
  *      -- React 4.0
- *       
+ *  
+ *         
+ *  -- Root Vue     
  *   	-- Vue 1.0
  *   	-- Vue 2.0
+ *   				-- Vue 2.1
+ *   				-- Vue 2.2
+ *   				-- Vue 2.3
  */
 
 
@@ -46,7 +52,8 @@ public class JavaScriptFramework {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
+	
+	@NotEmpty
 	@Size(min = 3, max = 30)
 	private String name;
 	
@@ -60,6 +67,12 @@ public class JavaScriptFramework {
 	
 	private int versionOrder;
 	
+	private int level;		
+	
+	@ManyToOne
+	@JoinColumn(name = "f_framework_group_id")
+	private FrameworkGroup frameworkGroup;
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "parentFramework", 
 			fetch = FetchType.EAGER, 
@@ -130,10 +143,28 @@ public class JavaScriptFramework {
 		this.versionOrder = versionOrder;
 	}
 	
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public FrameworkGroup getFrameworkGroup() {
+		return frameworkGroup;
+	}
+
+	public void setFrameworkGroup(FrameworkGroup frameworkGroup) {
+		this.frameworkGroup = frameworkGroup;
+	}
+	
 	@Override
 	public String toString() {
 		return "JavaScriptFramework [id=" + id + ", name=" + name + "]";
 	}
+
+
 
 
 
