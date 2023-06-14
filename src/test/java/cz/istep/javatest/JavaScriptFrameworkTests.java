@@ -67,7 +67,7 @@ public class JavaScriptFrameworkTests {
 	}
 
 	@Test
-	@DisplayName("Get **/framework-list** - Should return all Frameworks.")
+	@DisplayName("GET /framework-list - Should return all Frameworks.")
 	public void frameworksTest() throws Exception {
 		prepareData();
 
@@ -80,20 +80,29 @@ public class JavaScriptFrameworkTests {
 	
 	
 	@Test
-	@DisplayName("Get **/framework/{id}** - Get Framework by ID.")
-	public void frameworkById() throws Exception {
-		// To Do			
+	@DisplayName("GET /framework/{id} - Get Framework by ID.")
+	public void frameworkById() throws Exception {		
+		JavaScriptFramework angular = frameworkService.saveEntity(new JavaScriptFramework("ROOT Angular", null, 2));
+		Long angId = angular.getId();
+		mockMvc.perform(get("/framework/{id}", angId)).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+					.andExpect(jsonPath("$.id", is(angId.intValue())))
+					.andExpect(jsonPath("$.name", is("ROOT Angular")));
+			
 	}
 	
 	@Test
-	@DisplayName("Get **/framework/{id}** - Get Framework by ID - id not exists.")
+	@DisplayName("GET /framework/{id} - Get Framework by ID - id NOT exists.")
 	public void frameworkBy_IdNotExists() throws Exception {
-		// To Do			
+		mockMvc.perform(get("/framework/{id}", 999L))
+			.andExpect(status().isNotFound())
+			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.errorType", is("ID_NOT_FOUND")))
+			.andExpect(jsonPath("$.message", is("Entity JavaScriptFramework with id 999 was not found")));		
 	}
 	
 	
 	@Test
-	@DisplayName("Post **/framework-new** - Check if new Framework added")
+	@DisplayName("POST /framework-new - Check if new Framework added")
 	public void addFrameworkTest() throws Exception {
 		JavaScriptFramework parentFramework = this.frameworkService.findEntityByName("root");
 		JavaScriptFramework vueV3 = new JavaScriptFramework("React ver 3.0", parentFramework, 1);
@@ -108,7 +117,7 @@ public class JavaScriptFrameworkTests {
 	
 	
 	@Test
-	@DisplayName("Delete **/framework-delete/{id}** - Check if Framework was deleted")
+	@DisplayName("DELETE /framework-delete/{id} - Check if Framework was deleted")
 	public void deleteFrameworkById() throws Exception {
 		
 		this.mockMvc.perform(delete("/framework-delete/{id}", this.frameworkService.findEntityByName("React ver 3.2").getId()))
@@ -123,7 +132,7 @@ public class JavaScriptFrameworkTests {
 	 * Check if parent framework id exists 
 	 */
 	@Test
-	@DisplayName("Post **/framework-new** - Parent Framework NOT Exist")
+	@DisplayName("POST /framework-new - Parent Framework NOT Exist")
 	public void existParentFramework() throws Exception {
 		JavaScriptFramework parentFramework = new JavaScriptFramework(400L, "Framework which is not in db", null, 1);
 		// To do

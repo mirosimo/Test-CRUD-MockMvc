@@ -33,7 +33,9 @@ public class JavaScriptFrameworkService {
 	}
 	
 	public JavaScriptFramework findEntityById(int id) {
-		return this.frameworkRepository.findById(Long.valueOf(id)).orElseThrow(EntityNotFoundException::new);
+		
+		return this.frameworkRepository.findById(Long.valueOf(id))
+				.orElseThrow(() -> new EntityNotFoundException("Entity JavaScriptFramework with id " + id + " was not found"));
 	}
 	
 	public JavaScriptFramework findEntityByName(String name) {
@@ -48,4 +50,5 @@ public class JavaScriptFrameworkService {
 		JavaScriptFramework fr = this.frameworkRepository.save(framework);
 		return fr;
 	}
+	
 }

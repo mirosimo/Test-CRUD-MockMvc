@@ -3,8 +3,9 @@ package cz.istep.javatest.rest;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.Validator;
+import javax.persistence.EntityNotFoundException;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,9 +17,8 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Errors> handleValidationException(MethodArgumentNotValidException ex) {
-    	System.out.println("********* I am in validation exception ********");
         BindingResult result = ex.getBindingResult();
-        Errors errors = new Errors();
+        Errors errors = new Errors();               
         
         List<ValidationError> errorList = result.getFieldErrors().stream().map(e -> {
             return new ValidationError(e.getField(), e.getCode());
@@ -28,5 +28,15 @@ public class RestExceptionHandler {
                 
         return ResponseEntity.badRequest().body(errors);
     }
+    
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<CustomError> handleEntityNotFoundException(EntityNotFoundException ex) {
+    	CustomError customError = new CustomError();
+    	customError.setErrorType(ErrorType.ID_NOT_FOUND);  
+    	customError.setMessage(ex.getMessage());
+    	
+    	return new ResponseEntity<CustomError>(customError, HttpStatus.NOT_FOUND);    	
+    }
+    
 
 }

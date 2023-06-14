@@ -2,6 +2,7 @@ package cz.istep.javatest.controller;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import cz.istep.javatest.data.JavaScriptFramework;
+import cz.istep.javatest.repository.JavaScriptFrameworkRepository;
 import cz.istep.javatest.service.JavaScriptFrameworkService;
 
 @RestController
 public class JavaScriptFrameworkController {
+	
+	@Autowired
+	JavaScriptFrameworkRepository frameworkRepository;
 	
 	private final JavaScriptFrameworkService frameworkService;
 
@@ -49,7 +54,6 @@ public class JavaScriptFrameworkController {
 	 * Add new framework 
 	 */
 	@PostMapping("/framework-new")
-	//public ResponseEntity<JavaScriptFramework> frameworkNew(@RequestBody JavaScriptFramework framework) {
 	public ResponseEntity<JavaScriptFramework> frameworkNew(@Valid @RequestBody JavaScriptFramework framework) {
 		JavaScriptFramework savedFramework = this.frameworkService.saveEntity(framework);				
 		return new ResponseEntity<JavaScriptFramework>(savedFramework, HttpStatus.CREATED);	
