@@ -5,17 +5,17 @@ package cz.istep.javatest.rest;
  *  
  */
 public class CustomError {
-	private ErrorType errorType;
+	private CustomErrorType errorType;
 	private String message;
 		
 	private int entityId;
 	private String entityName;
 	
 	
-	public ErrorType getErrorType() {
+	public CustomErrorType getErrorType() {
 		return errorType;
 	}
-	public void setErrorType(ErrorType errorType) {
+	public void setErrorType(CustomErrorType errorType) {
 		this.errorType = errorType;
 	}
 	
@@ -40,6 +40,4 @@ public class CustomError {
 		this.entityName = entityName;
 	}
 
-	
-	
 }

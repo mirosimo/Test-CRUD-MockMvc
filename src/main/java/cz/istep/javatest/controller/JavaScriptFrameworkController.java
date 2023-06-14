@@ -2,7 +2,6 @@ package cz.istep.javatest.controller;
 
 import java.util.List;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cz.istep.javatest.data.JavaScriptFramework;
 import cz.istep.javatest.repository.JavaScriptFrameworkRepository;
+import cz.istep.javatest.rest.CustomErrorType;
 import cz.istep.javatest.service.JavaScriptFrameworkService;
 
 @RestController
@@ -54,7 +54,22 @@ public class JavaScriptFrameworkController {
 	 * Add new framework 
 	 */
 	@PostMapping("/framework-new")
-	public ResponseEntity<JavaScriptFramework> frameworkNew(@Valid @RequestBody JavaScriptFramework framework) {
+	public ResponseEntity<JavaScriptFramework> frameworkNew(@Valid @RequestBody JavaScriptFramework framework) {		
+		
+		
+		/* 
+		 * Roots frameworks have parent null
+		 * 
+		 * When is parent found, than is saved
+		 * otherwise
+		 * is thrown AppEntityNotFoundException and catched in RestExceptionHandler
+		 *  
+		 */
+		if (framework.getParentFramework() != null) {
+			this.frameworkService.findEntityById(framework.getParentFramework().getId().intValue(), 
+														CustomErrorType.PARENT_ENTITY_NOT_FOUND);
+		}
+		
 		JavaScriptFramework savedFramework = this.frameworkService.saveEntity(framework);				
 		return new ResponseEntity<JavaScriptFramework>(savedFramework, HttpStatus.CREATED);	
 	}

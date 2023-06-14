@@ -102,9 +102,9 @@ public class JavaScriptFrameworkTests {
 	
 	
 	@Test
-	@DisplayName("POST /framework-new - Check if new Framework added")
+	@DisplayName("POST /framework-new - Add new Framework")
 	public void addFrameworkTest() throws Exception {
-		JavaScriptFramework parentFramework = this.frameworkService.findEntityByName("root");
+		JavaScriptFramework parentFramework = this.frameworkService.findEntityByName("ROOT React");
 		JavaScriptFramework vueV3 = new JavaScriptFramework("React ver 3.0", parentFramework, 1);
 		
 		mockMvc.perform(post("/framework-new").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(vueV3)))
@@ -115,33 +115,35 @@ public class JavaScriptFrameworkTests {
 		assertThat(this.frameworkService.getAllEntities()).hasSize(10);
 	}
 	
-	
 	@Test
-	@DisplayName("DELETE /framework-delete/{id} - Check if Framework was deleted")
-	public void deleteFrameworkById() throws Exception {
+	@DisplayName("POST /framework-new - Add new Root Framework --> parent null")
+	public void addFrameworkParentNullTest() throws Exception {
+		JavaScriptFramework vueV3 = new JavaScriptFramework("Some new ROOT framework", null, 1);
 		
-		this.mockMvc.perform(delete("/framework-delete/{id}", this.frameworkService.findEntityByName("React ver 3.2").getId()))
-				.andExpect(status().isNoContent());
+		mockMvc.perform(post("/framework-new").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(vueV3)))
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("$.id").exists())
+			.andExpect(jsonPath("$.name", is("Some new ROOT framework")));		
 		
-		// Must be tunned yet ... 
-		//assertThat(this.frameworkService.getAllEntities()).hasSize(5);
+		assertThat(this.frameworkService.getAllEntities()).hasSize(10);
 	}
 	
-	
-	/* 
-	 * Check if parent framework id exists 
-	 */
+
 	@Test
-	@DisplayName("POST /framework-new - Parent Framework NOT Exist")
-	public void existParentFramework() throws Exception {
+	@DisplayName("POST /framework-new - Add new Framework - Parent Framework NOT Exist")
+	public void addNotExistParentFramework() throws Exception {
 		JavaScriptFramework parentFramework = new JavaScriptFramework(400L, "Framework which is not in db", null, 1);
-		// To do
-		/*assertThat(this.frameworkService.findEntityById(parentFramework.getId())).isNull();*/
+		JavaScriptFramework newFramework = new JavaScriptFramework("New Framework", parentFramework, 1);
+		
+		mockMvc.perform(post("/framework-new").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(newFramework)))
+		.andExpect(status().isConflict())
+		.andExpect(jsonPath("$.errorType", is("PARENT_ENTITY_NOT_FOUND")))
+		.andExpect(jsonPath("$.message", is("Parent entity with id 400 was not found")));		
 	}
-			
 	
+
 	@Test
-	@DisplayName("Post **/framework-new** - Error - empty Framework, Framework name exceed the limit length")
+	@DisplayName("POST /framework-new - Error - empty Framework, Framework name exceed the limit length")
 	public void addFrameworkInvalid() throws Exception {						
 		JavaScriptFramework framework = new JavaScriptFramework();
 		mockMvc.perform(post("/framework-new").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(framework)))
@@ -157,5 +159,23 @@ public class JavaScriptFrameworkTests {
 			.andExpect(jsonPath("$.errors[0].field", is("name")))
 			.andExpect(jsonPath("$.errors[0].message", is("Size")));
 	}
+	
+	
+	@Test
+	@DisplayName("DELETE /framework-delete/{id} - Check if Framework was deleted")
+	public void deleteFrameworkById() throws Exception {
+		
+		this.mockMvc.perform(delete("/framework-delete/{id}", this.frameworkService.findEntityByName("React ver 3.2").getId()))
+				.andExpect(status().isNoContent());
+		
+		// Must be tunned yet ... 
+		//assertThat(this.frameworkService.getAllEntities()).hasSize(5);
+	}
+	
+	
+	
+			
+	
+
 
 }

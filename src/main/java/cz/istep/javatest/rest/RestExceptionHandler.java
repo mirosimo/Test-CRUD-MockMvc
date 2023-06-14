@@ -12,13 +12,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import cz.istep.javatest.exceptions.AppEntityNotFoundException;
+
 @ControllerAdvice
 public class RestExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Errors> handleValidationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ValidationErrors> handleValidationException(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
-        Errors errors = new Errors();               
+        ValidationErrors errors = new ValidationErrors();               
         
         List<ValidationError> errorList = result.getFieldErrors().stream().map(e -> {
             return new ValidationError(e.getField(), e.getCode());
@@ -29,14 +31,14 @@ public class RestExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
     
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<CustomError> handleEntityNotFoundException(EntityNotFoundException ex) {
+    @ExceptionHandler(AppEntityNotFoundException.class)
+    public ResponseEntity<CustomError> handleEntityNotFoundException(AppEntityNotFoundException exception) {
     	CustomError customError = new CustomError();
-    	customError.setErrorType(ErrorType.ID_NOT_FOUND);  
-    	customError.setMessage(ex.getMessage());
+    	customError.setErrorType(exception.getErrorType());  
+    	customError.setMessage(exception.getMessage());
     	
-    	return new ResponseEntity<CustomError>(customError, HttpStatus.NOT_FOUND);    	
+    	return new ResponseEntity<CustomError>(customError, exception.getHttpStatus());    	
     }
     
-
+    
 }
