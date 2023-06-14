@@ -7,6 +7,12 @@ import org.springframework.http.HttpStatus;
 import cz.istep.javatest.rest.CustomErrorType;
 
 public class AppEntityNotFoundException extends EntityNotFoundException {
+	
+	private CustomErrorType errorType;
+	
+	private String message;
+	
+	private HttpStatus httpStatus;
 
 	public AppEntityNotFoundException() {
 		super();
@@ -16,12 +22,6 @@ public class AppEntityNotFoundException extends EntityNotFoundException {
 		this.message = message;
 	}
 	
-	private CustomErrorType errorType;
-	
-	private String message;
-	
-	private HttpStatus httpStatus;
-
 	
 	public CustomErrorType getErrorType() {
 		return errorType;
