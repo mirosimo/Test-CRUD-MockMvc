@@ -38,7 +38,6 @@ public class JavaScriptFrameworkService {
 		exception.setErrorType(CustomErrorType.ID_NOT_FOUND);
 		exception.setHttpStatus(HttpStatus.NOT_FOUND);
 		exception.setMessage("Entity JavaScriptFramework with id " + id + " was not found");
-		
 		return this.frameworkRepository.findById(Long.valueOf(id))
 				.orElseThrow(() -> exception);
 	}

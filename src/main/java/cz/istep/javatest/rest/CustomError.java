@@ -7,10 +7,7 @@ package cz.istep.javatest.rest;
 public class CustomError {
 	private CustomErrorType errorType;
 	private String message;
-		
-	private int entityId;
-	private String entityName;
-	
+	private String stackTrace;		
 	
 	public CustomErrorType getErrorType() {
 		return errorType;
@@ -26,18 +23,13 @@ public class CustomError {
 		this.message = message;
 	}
 	
-	public int getEntityId() {
-		return entityId;
+	public String getStackTrace() {
+		return stackTrace;
 	}
-	public void setEntityId(int entityId) {
-		this.entityId = entityId;
+	public void setStackTrace(String stackTrace) {
+		this.stackTrace = stackTrace;
 	}
 	
-	public String getEntityName() {
-		return entityName;
-	}
-	public void setEntityName(String entityName) {
-		this.entityName = entityName;
-	}
+
 
 }
