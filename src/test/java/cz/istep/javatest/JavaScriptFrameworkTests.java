@@ -164,12 +164,13 @@ public class JavaScriptFrameworkTests {
 	@Test
 	@DisplayName("DELETE /framework-delete/{id} - Check if Framework was deleted")
 	public void deleteFrameworkById() throws Exception {
+		Long delEntity = this.frameworkService.findEntityByName("React ver 3.2").getId();
+		//System.out.println("****Del je: ****" + delEntity);
 		
-		this.mockMvc.perform(delete("/framework-delete/{id}", this.frameworkService.findEntityByName("React ver 3.2").getId()))
+		this.mockMvc.perform(delete("/framework-delete/{id}", delEntity))
 				.andExpect(status().isNoContent());
-		
-		// Must be tunned yet ... 
-		//assertThat(this.frameworkService.getAllEntities()).hasSize(5);
+		 
+		//assertThat(this.frameworkService.getAllEntities()).hasSize(8);
 	}
 	
 	
